@@ -4,23 +4,20 @@
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------
 
-import java.util.*;
-import spout.*;
-
 Checkerboard board;
 PImage img;
 
 
 void setup() {
-  size(1920, 1080, P2D);
+  size(500, 800, P2D);
   img = loadImage("portrait.jpg");
-  board = new Checkerboard(1920,1080,2,255);
+  board = new Checkerboard(width,height,2,255);
 
   board.fillImage(img);
   board.display();
 
   background(0);
-  
+
 
 
 }
@@ -29,9 +26,15 @@ void setup() {
 void draw() {
 
 
-  board.evolveXOR(2);
+  //board.evolveXOR(0);
+
+  board.evolveART(50);
+
   board.display();
-  delay(100);
+  //delay(500);
+
+
+  println(frameCount);
 
 
 }

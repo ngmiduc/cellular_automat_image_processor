@@ -32,8 +32,8 @@ class Checkerboard {
     this.dead = 0;
 
     this.max = m;
-    this.thresh = 1;
-    
+    this.thresh = 50;
+
 
   }
 
@@ -120,7 +120,7 @@ class Checkerboard {
             k = this.columns-2;
           else if (k == this.columns)
             k = 0;
-          else if (k == this.columns +1 ) 
+          else if (k == this.columns +1 )
             k = 1;
 
           if (l==-1)
@@ -236,16 +236,16 @@ class Checkerboard {
       for (int y = 0; y < this.rows; y++)
         this.board[x][y] = new Cell(x, y, int(random(k)), this.cellSize, this.max);
   }
-  
+
   void fillImage(PImage img){
    img.loadPixels();
-   
-   
+
+
     for (int x = 0; x < this.columns; x++)
       for (int y = 0; y < this.rows; y++){
-         color c = img.pixels[y*this.columns + x];
-         
-        
+         color c = img.pixels[y*img.width + x];
+
+
         this.board[x][y] = new Cell(x, y, int((red(c)+blue(c)+green(c))/3), this.cellSize, this.max);
       }
   }
@@ -258,8 +258,8 @@ class Checkerboard {
         case 0:
           // Moore neighbourhood
           neighbours = getNeighborsOf(x, y);
-          this.board[x][y].setState((this.board[x][y].getState()+neighbours)%255);
-          break;           
+          this.board[x][y].setState(int((this.board[x][y].getState()+neighbours)/9));
+          break;
 
         case 1:
           neighbours= 0;
@@ -301,6 +301,53 @@ class Checkerboard {
 
         if (checkNeighborsValue(x, y, (myval+1)%max) >= this.thresh)
           this.board[x][y].setState((myval+1)%max);
+      }
+    }
+  }
+
+
+  int checkART(int x, int y, int val, int t) {
+
+
+    IntList canditates = new IntList();
+
+    for (int i = -1; i<=1; i++)
+      for (int j = -1; j<=1; j++)
+        if ( !((i == 0) && (j == 0)) ) {
+          int k = x+i;
+          int l = y+j;
+
+          if (k<0)
+            k = this.columns-1;
+          else if (k >= this.columns)
+            k = 0;
+          if (l<0)
+            l = this.rows-1;
+          else if (l >= this.rows)
+            l = 0;
+
+          int state = this.board[k][l].getPrevState();
+
+          if ( (state <= (val+t)) && (state >= (val-t)) ){
+            canditates.append(state);
+            }
+        }
+
+    if(canditates.size() == 0)
+      return -1;
+    else
+      return canditates.get(int(random(random(canditates.size()))));
+  }
+
+  void evolveART(int t) {
+
+    for (int x = 0; x < this.columns; x++) {
+      for (int y = 0; y < this.rows; y++) {
+
+        int myval = this.board[x][y].getState();
+        int newstate = checkART(x, y, myval, t);
+        if  ( newstate != -1)
+          this.board[x][y].setState(newstate);
       }
     }
   }
