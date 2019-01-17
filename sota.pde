@@ -8,7 +8,7 @@ import java.util.*;
 import spout.*;
 
 Checkerboard board;
-PImage img;  
+PImage img;
 
 
 void setup() {
@@ -21,8 +21,8 @@ void setup() {
 
   background(0);
   
- 
-  
+
+
 }
 
 
@@ -32,6 +32,6 @@ void draw() {
   board.evolveXOR(2);
   board.display();
   delay(100);
-  
+
 
 }
