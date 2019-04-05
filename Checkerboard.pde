@@ -336,7 +336,8 @@ class Checkerboard {
     if(canditates.size() == 0)
       return -1;
     else
-      return canditates.get(int(random(random(canditates.size()))));
+      //return canditates.get(int(random(random(canditates.size()))));
+      return canditates.get(0);
   }
 
   void evolveART(int t) {
